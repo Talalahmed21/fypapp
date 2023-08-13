@@ -924,7 +924,7 @@ def main():
         st.write("Using Camera...")
 
         # Use OpenCV to capture video from the camera
-        # cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(0)
 
         if not cap.isOpened():
             st.error("Error: Unable to access the camera.")
