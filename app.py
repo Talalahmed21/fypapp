@@ -129,12 +129,19 @@ def main():
         # Option to upload an image
         uploaded_file = st.file_uploader(
             "Choose an image...", type=["jpg", "jpeg", "png"])
+        
+    elif image_option == "Use Camera":
+        # Capture a single image from the camera
+        uploaded_file = st.camera_input("Webcam image")
 
-        if uploaded_file is not None:
+        
+
+    if uploaded_file is not None:
             
             # Display the uploaded image
             image = Image.open(uploaded_file)
-            st.image(image, caption="Uploaded Image", use_column_width=True)
+            if image_option == "Upload Image":
+                st.image(image, caption="Uploaded Image", width=300)
 
 
             # Perform prediction on the uploaded image
@@ -235,32 +242,7 @@ def main():
             elif predicted_label == 'Background_without_leaves':
                 st.write("No leaf detected")
 
-            #     with open('Background_without_leaves.txt') as f:
-            #         content = f.read()
-
-
-            #     a = content.split('\n\n')
-
-            #     b = a[0].split('Background Without Leaves Disease')
-            #     c = b[1].split('\n')
-            #     st.header('Background Without Leaves')
-            #     for line in c[1:]:
-            #         st.write(line)
-
-
-            #     b = a[1].split('Possible Causes')
-            #     c = b[1].split('\n')
-                
-            #     st.header('Possible Causes')
-            #     for line in c[1:]:
-            #         st.write(f"- {line}")
-
-            #     b = a[2].split('Actions Required')
-            #     c = b[1].split('\n')
-
-            #     st.header('Actions Required')
-            #     for line in c[1:]:
-            #         st.write(f"- {line}")
+           
 
             elif predicted_label == 'Cherry_Powdery_mildew':
 
@@ -915,43 +897,6 @@ def main():
 
             st.write("While your plant disease detection app is a valuable tool, it's essential to remember that its predictions are based on visual similarities. For precise results and effective treatment, consider seeking guidance from experts and conducting proper laboratory tests to confirm the presence of any disease")
             st.write("Thank you for using the Plant Leaf Disease Detection app!")
-                
-            
-
-
-    elif image_option == "Use Camera":
-        # Option to use the camera for real-time prediction
-        st.write("Using Camera...")
-
-        # Use OpenCV to capture video from the camera
-        cap = cv2.VideoCapture(0)
-
-        if not cap.isOpened():
-            st.error("Error: Unable to access the camera.")
-            return
-
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                st.error("Error: Unable to capture frame.")
-                break
-
-            # Convert the frame to PIL image format
-            frame_pil = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
-            # Perform prediction on the captured frame
-            predicted_label = predict_disease(frame_pil)
-
-            # Display the frame with the prediction
-            st.image(frame, caption=f"Predicted Disease: {predicted_label}", use_column_width=True)
-
-            # Stop capturing when the 'Stop' button is pressed
-            if st.button("Stop"):
-                cap.release()
-                break
-
-        st.write("While your plant disease detection app is a valuable tool, it's essential to remember that its predictions are based on visual similarities. For precise results and effective treatment, consider seeking guidance from experts and conducting proper laboratory tests to confirm the presence of any disease")
-        st.write("Thank you for using the Plant Leaf Disease Detection app!")
 
 if __name__ == "__main__":
     main()
